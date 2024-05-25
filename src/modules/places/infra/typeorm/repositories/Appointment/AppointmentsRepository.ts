@@ -101,6 +101,22 @@ class Appointments implements IAppointmentsRepository {
     return appointments;
   }
 
+  public async findAppointmentUsers(
+    id_appointment: string,
+  ): Promise<AppointmentUsers[]> {
+    const appointmentsUsers = await this.usersRepository.find({
+      where: { id_appointment },
+    });
+    return appointmentsUsers;
+  }
+
+  public async findUnpaidAppointments(): Promise<Appointment[]> {
+    const appointments = await this.ormRepository.find({
+      where: { paid: false, canceled: false },
+    });
+    return appointments;
+  }
+
   public async deleteAppointment(id_appointment: string): Promise<boolean> {
     const appointment = await this.ormRepository.findOne({
       where: {

@@ -16,62 +16,33 @@ class SchedulePixPaymentService {
   ) {}
 
   public async execute(): Promise<void> {
-    const adminUsers = await this.usersRepository.findAllAdminUsers();
+    try {
+      const appointments =
+        await this.appointmentsRepository.findUnpaidAppointments();
 
-    const appointments =
-      await this.appointmentsRepository.findAllUnpaidAppointments();
-    const hoursToAdd = 0;
+      appointments.forEach(async i => {
+        const hoursToAdd = -3;
 
-    appointments.map(async item => {
-      if (
-        differenceInMinutes(new Date(), addHours(item.created_at, hoursToAdd)) >
-        10
-      ) {
-        // await this.appointmentsRepository.deleteAppointment(item.id);
-      } else {
-        axios
-          .get(
-            `https://app.vindi.com.br/api/v1/charges/${item.id_transaction}`,
-            {
-              auth: {
-                username: keys().production_private_key,
-                password: '',
-              },
-            },
-          )
-          .then(response => {
-            if (String(response.data.charge.status) !== 'paid') {
-              this.appointmentsRepository.updatePaidAppointment(item.id);
-              const start_date = `Início: ${format(
-                new Date(item.start_date),
-                'dd/MM/yyyy HH:mm',
-              )}`;
-              const finish_date = `Fim: ${format(
-                new Date(item.finish_date),
-                'dd/MM/yyyy HH:mm',
-              )}`;
-              const title = `Nova Reserva - ${item.observation.replace(
-                ' - App',
-                '',
-              )}`;
+        const minutesDifference = differenceInMinutes(
+          new Date(),
+          new Date(addHours(i.created_at, hoursToAdd)),
+        );
 
-              let notificationMessage = `${start_date}\n${finish_date}`;
-              if (item.amount > 0) {
-                notificationMessage += `\n\nMateriais:\n- ${item.material}: ${item.amount}`;
-              }
+        if (i.observation === 'Pedro Campos Carvalho - App') {
+          console.log(minutesDifference);
+        }
 
-              adminUsers.map(i => {
-                WhatsAppNotification(
-                  i.cellphone,
-                  `${title}\n${notificationMessage}`,
-                );
-                return null;
-              });
-            }
-          })
-          .catch();
-      }
-    });
+        if (!i.paid && !i.canceled) {
+          if (minutesDifference >= 10) {
+            i.canceled = true;
+            i.observation = `${i.observation} - Cancelado por falta de pagamento`;
+            this.appointmentsRepository.save(i);
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

@@ -97,4 +97,6 @@ export default interface IAppointmentsRepository {
     id_appointment: string,
     date: Date,
   ): Promise<Appointment>;
+  findUnpaidAppointments(): Promise<Appointment[]>;
+  findAppointmentUsers(id_appointment: string): Promise<AppointmentUsers[]>;
 }
