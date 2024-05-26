@@ -15,6 +15,6 @@ export default (): ProjectProps => {
     case 'BelaVista':
       return BelaVista;
     default:
-      return Ahaya;
+      return BelaVista;
   }
 };

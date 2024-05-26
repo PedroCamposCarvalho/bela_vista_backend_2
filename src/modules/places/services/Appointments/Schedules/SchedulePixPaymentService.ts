@@ -1,9 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import axios from 'axios';
-import { differenceInMinutes, addHours, format } from 'date-fns';
-import keys from '@modules/payments/keys';
-import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import WhatsAppNotification from '@modules/places/providers/WhatsAppNotification';
+import { differenceInMinutes, addHours } from 'date-fns';
 import IAppointmentsRepository from '../../../repositories/Appointments/IAppointmentsRepository';
 
 @injectable()
@@ -11,8 +7,6 @@ class SchedulePixPaymentService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
-    @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
   ) {}
 
   public async execute(): Promise<void> {
