@@ -23,6 +23,8 @@ class SchedulePixPaymentService {
         );
 
         if (i.observation === 'Pedro Campos Carvalho - App') {
+          console.log(`Criado em: ${i.created_at}`);
+          console.log(`Data Atual: ${new Date()}`);
           console.log(minutesDifference);
         }
 
