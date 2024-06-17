@@ -29,10 +29,10 @@ class SchedulePixPaymentService {
         }
 
         if (!i.paid && !i.canceled) {
-          if (minutesDifference >= 10) {
+          if (minutesDifference >= 20) {
             i.canceled = true;
             i.observation = `${i.observation} - Cancelado por falta de pagamento`;
-            // this.appointmentsRepository.save(i);
+            this.appointmentsRepository.save(i);
           }
         }
       });
