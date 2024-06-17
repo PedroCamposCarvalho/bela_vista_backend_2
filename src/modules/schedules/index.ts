@@ -25,6 +25,6 @@ export default function projectSchedules(): void {
   // }
 }
 
-cron.schedule('0 9 * * *', async function () {
-  fetch(`http://localhost:8888/appointments/scheduleDailyAppointments`);
-});
+// cron.schedule('0 9 * * *', async function () {
+//   fetch(`http://localhost:8888/appointments/scheduleDailyAppointments`);
+// });
