@@ -18,8 +18,8 @@ class SchedulePixPaymentService {
         const hoursToAdd = -3;
 
         const minutesDifference = differenceInMinutes(
-          new Date(addHours(i.created_at, hoursToAdd)),
           new Date(),
+          new Date(i.created_at),
         );
 
         if (i.observation === 'Pedro Campos Carvalho - App') {
