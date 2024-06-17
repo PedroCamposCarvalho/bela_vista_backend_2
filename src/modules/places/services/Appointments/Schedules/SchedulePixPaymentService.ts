@@ -32,7 +32,7 @@ class SchedulePixPaymentService {
           if (minutesDifference >= 10) {
             i.canceled = true;
             i.observation = `${i.observation} - Cancelado por falta de pagamento`;
-            this.appointmentsRepository.save(i);
+            // this.appointmentsRepository.save(i);
           }
         }
       });
